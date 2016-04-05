@@ -51,11 +51,9 @@ void main(string[] args) {
 		"output|o"               , &outputFilePath
 		);
 
-	char[] strInput;
+	char[] strInput = [];
 	if (exists(inputFilePath))
 		strInput = cast(char[]) read(inputFilePath);
-	else
-		strInput = ['0', '\n'];
 
 	File outFile = (outputFilePath != "" ? File(outputFilePath, "w") : stdout);
 
