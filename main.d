@@ -1,14 +1,15 @@
 import std.stdio;
 import std.file;
 import std.getopt;
-import std.algorithm;
-import std.container;
 
 import utils;
 import ConwayCommon;
 
 void writeListStateToFile(ConwayState state, File file) {
-	auto range = Range2D(0, 10, 0, 10);
+	auto range = state.getBoundingRange2D();
+	range.minRow = 0;
+	range.minCol = 0;
+
 	int arrCols = range.maxCol - range.minCol + 1;
 
 	byte[] asArr = state.getAsByteArray(range);
@@ -50,13 +51,17 @@ void main(string[] args) {
 		"output|o"               , &outputFilePath
 		);
 
-	char[] data = cast(char[]) read(inputFilePath);
+	char[] strInput;
+	if (exists(inputFilePath))
+		strInput = cast(char[]) read(inputFilePath);
+	else
+		strInput = ['0', '\n'];
 
 	File outFile = (outputFilePath != "" ? File(outputFilePath, "w") : stdout);
 
 	auto state = new ConwayState();
 
-	conwayStateFromCharArr(state, data);
+	conwayStateFromCharArr(state, strInput);
 
 	state.iterate(numIterations);
 	writeListStateToFile(state, outFile);

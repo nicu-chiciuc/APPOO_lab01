@@ -14,36 +14,27 @@ class ConwayState {
 
 	public CellDict cellDict;
 
-	public int getMaxRow() {
-		int maxRow = -100000;
-		foreach (pos, _; cellDict)
+	public Range2D getBoundingRange2D () {
+		int maxRow = int.min;
+		int maxCol = int.min;
+		int minRow = int.max;
+		int minCol = int.max;
+
+		foreach (pos, _; cellDict) {
 			if (pos.row > maxRow)
 				maxRow = pos.row;
-		return maxRow;
-	}
-
-	public int getMaxCol() {
-		int maxCol = -100000;
-		foreach (pos, _; cellDict)
 			if (pos.col > maxCol)
 				maxCol = pos.col;
-		return maxCol;
-	}
-
-	public int getMinRow() {
-		int minRow = 100000;
-		foreach (pos, _; cellDict)
 			if (pos.row < minRow)
 				minRow = pos.row;
-		return minRow;
-	}
-
-	public int getMinCol() {
-		int minCol = 100000;
-		foreach (pos, _; cellDict)
 			if (pos.col < minCol)
 				minCol = pos.col;
-		return minCol;
+		}
+
+		if (maxRow == int.min)
+			return Range2D();
+		else
+			return Range2D(minRow, maxRow, minCol, maxCol);
 	}
 
 	public void setAlive(int row, int col) {
@@ -99,7 +90,7 @@ class ConwayState {
 		}
 	}
 
-	public void iterateOnce() {
+	public void iterate() {
 		initBeforeIteration();
 
 		populateNeighbors();
@@ -109,7 +100,7 @@ class ConwayState {
 
 	public void iterate(int numIterations) {
 		while (numIterations --> 0) {
-			iterateOnce();
+			iterate();
 		}
 	}
 
