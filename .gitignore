@@ -1,3 +1,5 @@
 in.txt
 out.txt
 *.obj
+*.o
+*.hi
